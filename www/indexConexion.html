@@ -42,11 +42,12 @@ span
     text-align: left;
 }
 </style>
-<script src="js/socket.io.js"></script>
+<script src="js/socket.io.client.js"></script>
+<script src="js/socket.io.server.js"></script>
 <script type="text/javascript">
 <!--
 // aquí ponemos la IP PÚBLICA
-var websocket = io.connect("http://192.168.101.13:2222");
+var websocket = io.connect("http://localhost:2222");
  
 window.onload = function()
 {
@@ -63,7 +64,7 @@ window.onload = function()
     });
  
     var form = document.getElementById('zform');
-    var message = document.getElementById('zmessage');
+    var message = document.getElementById('zmessage');	
     form.onsubmit = function(e)
     {
         websocket.emit("newMessage", message.value);
