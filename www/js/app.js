@@ -1,14 +1,25 @@
-// note, io.listen(<port>) will create a http server for you
-var io = require('socket.io').listen(80);
+var app = require('http').createServer(handler)
+  , io = require('socket.io').listen(app)
+  , fs = require('fs')
+
+app.listen(2222);
+
+function handler (req, res) {
+  fs.readFile('C:/Users/66785361/Documents/GitHub/phonegap-start/www/indexConexion.html',
+  function (err, data) {
+    if (err) {
+      res.writeHead(500);
+      return res.end('Error loading indexConexion.html');
+    }
+
+    res.writeHead(200);
+    res.end(data);
+  });
+}
 
 io.sockets.on('connection', function (socket) {
-  io.sockets.emit('this', { will: 'be received by everyone'});
-
-  socket.on('private message', function (from, msg) {
-    console.log('I received a private message by ', from, ' saying ', msg);
-  });
-
-  socket.on('disconnect', function () {
-    io.sockets.emit('user disconnected');
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
   });
 });
