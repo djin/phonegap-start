@@ -1,48 +1,92 @@
-jws.LauridsClientPlugIn = {
-	// if namespace is changed update server plug-in accordingly!
-	NS: "com.lauridmeyer.tests.LauridsPlugIn",
-
-	//Method is called when a token has to be progressed
-	processToken: function( aToken ) {
-	    // check if namespace matches
-	    if( aToken.ns == jws.LauridsClientPlugIn.NS ) {
-	      // if it's an answer for the request "getAuthorName"
-	      if( aToken.reqType == "getAuthorName" ) {
-	    	  alert( "This Tutorial is done by: " + aToken.name );
-	      }
-	      // if it's an answer for the request "calculate"
-	      else if( aToken.reqType == "calculate" ) {
-	    	  alert( "calculated Number is: " + aToken.calNumber );
-		  }
-	    }
-	  },
-
-	  //Method is called from the button "Author"
-	  //to send a request to the jwebsocketserver-> LauridsPlugIn
-	  requestAuthorName: function( aOptions ) {
-	    if( this.isConnected() ) {
-	       //create the request token
-	      var lToken = {
-	         ns: jws.LauridsClientPlugIn.NS,
-	         type: "getAuthorName"
-	      };
-	      console.log("asking for Author Name...");
-	      this.sendToken( lToken,  aOptions );//send it
-	    }
-	  },
-
-	  calculateMyNumber: function(inputNumber, aOptions ) {
-		    if( this.isConnected() ) {
-		    	//create the request token
-		      var lToken = {
-			     ns: jws.LauridsClientPlugIn.NS,
-			     type: "calculate",
-			     myNumber: inputNumber//add the input Number to our token
-		      };
-		      console.log("sending calculation request for:"+inputNumber);
-		      this.sendToken( lToken,  aOptions );//send it
-		    }
-		}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Online chat</title>
+<style>
+body
+{
+    color: #333;
+    background: #333;
+    font-family: "Helvetica", Arial;
+    font-size: 14px;
+    text-align: center;
+}
+.container
+{
+    background: #ccc;
+    border-radius: 1em;
+    box-shadow: 0px 5px 5px rgba(0,0,0,0.5);
+    text-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+    margin: 1em auto;
+    padding: 1em;
+    width: 90%;
+}
+ 
+input
+{
+    display: block;
+    font-size: 12px;
+    margin: 1em auto;
+    padding: 0.5em;
+    width: 95%;
+}
+ 
+span
+{
+    display: block;
+    font-size: 12px;
+    margin: 1em auto;
+    padding: 0.5em;
+    width: 95%;
+    text-align: left;
+}
+</style>
+<script src="js/socket.io.client.js"></script>
+<script src="js/socket.io.server.js"></script>
+<script type="text/javascript">
+<!--
+// aquí ponemos la IP PÚBLICA
+var websocket = io.connect("ws://localhost:3222/prime-push/counter");
+ 
+window.onload = function()
+{
+    websocket.on("sendEvent", function(data)
+    {
+        var chat = document.getElementById('zchat');
+        var span = document.createElement('span');
+        var txt = document.createTextNode(data);
+        span.appendChild(txt);
+        if(chat.hasChildNodes())
+            chat.insertBefore(span, chat.firstChild);
+        else
+            chat.appendChild(span);
+    });
+ 
+    var form = document.getElementById('zform');
+    var message = document.getElementById('zmessage');	
+    form.onsubmit = function(e)
+    {
+        websocket.emit("newMessage", message.value);
+        message.value = '';
+        return false;
+    };
+ 
+    message.value = '';
+    message.focus();
 };
-//add the client PlugIn
-jws.oop.addPlugIn( jws.jWebSocketTokenClient, jws.LauridsClientPlugIn );
+//-->
+</script>
+</head>
+<body>
+<div class="container">
+<form id="zform">
+    <label>Message: </label>
+    <input type="text" name="zmessage" id="zmessage" placeholder="Please insert message" required />
+    <input type="submit" />
+</form>
+</div>
+<div id="zchat" class="container">
+</div>
+</body>
+</html>
