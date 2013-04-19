@@ -22,3 +22,21 @@ var app = {
         completeElem.className = completeElem.className.split('hide').join('');
     }
 };
+
+//Codigo para quitar el link izquierdo de los split button de las listview
+$(document).ready(function(){
+$('.leftLink').parent().parent().parent().removeClass('ui-btn');
+$('.leftLink').contents().unwrap();
+});
+
+function anadirLista(){
+$('#contenido').replaceWith("<ul id=\"lista \" data-role=\"listview\"></ul>");
+};
+
+function anadirCancion(nombre,artista,album,id,duracion,votado,sonado){
+
+
+
+$('#lista').html("")
+
+}
