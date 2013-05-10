@@ -8,6 +8,11 @@
 #contenido{
 	margin: auto;
 }
+
+.botonVotar.tap {
+          data-icon: "plus";
+        }
+
 /*css para sobreescribir los split button de las listview jquerymobile*/
 .ui-li .ui-btn-text span.ui-link-inherit { text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
 .ui-li .ui-btn-inner span.ui-link-inherit { padding: .7em 15px .7em 15px; display: block;}
