@@ -27,41 +27,26 @@ var app = {
 
 $(document).ready(function () {
 
+    // $(".botonVotar").on('tap', tapHandler);
+    $('#cab').on('tap', tapHandler1);
 
 
 });
 
 
 //Funcion para probar añadirlinea
-$(function () {
-
-    $('#cab').on('tap', tapHandler1);
-
-    function tapHandler1(event) {
-        anadirCancion("asdgasdgasdg", "Siemasasdgasdgpre Fuertes", "dsdg", Math.floor(Math.random()*100), "1:30", 0, 0);
-    }
-});
+function tapHandler1() {
+    anadirCancion("asdgasdgasdg", "Siemasasdgasdgpre Fuertes", "dsdg", Math.floor(Math.random() * 100), "1:30", 0, 0);
+};
 
 //Funcion votar
-$(function () {
+function tapHandler() {
+    alert('adfas');
+    cambiarIconoVotada(this.id);
 
-    $('.botonVotar').on('tap', tapHandler);
-    
-
-    function tapHandler(event) {
-        alert(this.id);
-        cambiarIconoVotada(this.id);
-        
-    }
-
-});
+};
 
 function anadirCancion(nombre, artista, album, id, duracion, votado, sonado) {
-
-    var pulsado;
-    if (votado == 1) {
-        pulsado
-    }
 
     var textoAnadir = "<li id=\"" + id + "\" data-icon=\"star\">" +
 				"<a href=\"#\"onclick=\"return false;\" class=\"leftLink\">" +
@@ -77,9 +62,22 @@ function anadirCancion(nombre, artista, album, id, duracion, votado, sonado) {
     $('#lista').listview('refresh');
     arreglarEstiloLineas();
 
+    var idhash = "#" + id ;
+
+    $(idhash).on("tap", function () {
+        if (votado == 0) {
+            cambiarIconoVotada(this.id);
+            votado = 1;
+        } else {
+            cambiarIconoDesvotada(this.id);
+            votado = 0;
+        }
+
+    });
+
 };
 
-function arreglarEstiloLineas(){
+function arreglarEstiloLineas() {
     //Codigo para quitar el link izquierdo de los split button de las listview
     $('.leftLink').parent().parent().parent().removeClass('ui-btn');
     $('.leftLink').contents().unwrap();
@@ -88,5 +86,23 @@ function arreglarEstiloLineas(){
 //Funcion para cambiar el icono a una cancion votada. Recibe el id de la cancion y la transforma al selector jquery.
 function cambiarIconoVotada(id) {
     var selector = "#" + id + " .ui-btn-inner .ui-btn .ui-icon";
-    $(selector).addClass("ui-icon-check").removeClass("ui-icon-star");
+    var idalmo = "#" + id + " .botonVotar";
+    //$(selector).addClass("ui-icon-check").removeClass("ui-icon-star");
+    var theme = 'e';
+    $(idalmo).find('.ui-btn')
+                       .removeClass('ui-btn-up-a ui-btn-hover-a')
+                       .addClass('ui-btn-up-' + theme)
+                       .attr('data-theme', theme);
+}
+
+//Funcion para cambiar el icono a una cancion no votada. Recibe el id de la cancion y la transforma al selector jquery.
+function cambiarIconoDesvotada(id) {
+    var selector = "#" + id + " .ui-btn-inner .ui-btn .ui-icon";
+    var idalmo = "#" + id + " .botonVotar";
+    //$(selector).addClass("ui-icon-star").removeClass("ui-icon-check");
+     var theme = 'a';
+    $(idalmo).find('.ui-btn')
+                       .removeClass('ui-btn-up-e ui-btn-hover-e')
+                       .addClass('ui-btn-up-' + theme)
+                       .attr('data-theme', theme);
 }
