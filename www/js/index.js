@@ -1,3 +1,4 @@
+//Cosas del phonegap
 var app = {
     initialize: function () {
         this.bind();
@@ -23,31 +24,37 @@ var app = {
     }
 };
 
-//Codigo para quitar el link izquierdo de los split button de las listview
+
 $(document).ready(function () {
-    $('.leftLink').parent().parent().parent().removeClass('ui-btn');
-    $('.leftLink').contents().unwrap();
-    anadirLista();
-    anadirCancion("asdgasdgasdg", "Siemasasdgasdgpre Fuertes", "dsdg", "1", "1:30", 0, 0);
-    /////// ??????????????????
+
+
+
 });
 
-$(function () {
-    // Bind the tapHandler callback function to the tap event on div.box
-    $(".botonVotar").on('tap', tapHandler);
 
-    // Callback function references the event target and adds the 'tap' class to it
-    function tapHandler(event) {
-        cambiarIconoVotada();
+//Funcion para probar añadirlinea
+$(function () {
+
+    $('#cab').on('tap', tapHandler1);
+
+    function tapHandler1(event) {
+        anadirCancion("asdgasdgasdg", "Siemasasdgasdgpre Fuertes", "dsdg", Math.floor(Math.random()*100), "1:30", 0, 0);
     }
 });
 
-function anadirLista() {
-    $('#contenido').empty();
-    $('#contenido').html("<ul id=\"lista\" data-role=\"listview\"></ul>");
-    anadirCancion("Never Gonna", "Siempre Fuertes", "HUEAHEUA", "1", "1:30", 0, 0);
+//Funcion votar
+$(function () {
+
+    $('.botonVotar').on('tap', tapHandler);
     
-};
+
+    function tapHandler(event) {
+        alert(this.id);
+        cambiarIconoVotada(this.id);
+        
+    }
+
+});
 
 function anadirCancion(nombre, artista, album, id, duracion, votado, sonado) {
 
@@ -62,23 +69,21 @@ function anadirCancion(nombre, artista, album, id, duracion, votado, sonado) {
 						"<h1>" + nombre + "</h1><p>" + artista + "</p><p>" + album + "</p>" +
 					"</span>" +
 				"</a>" +
-				"<a href=\"#\" data-theme=\"a\"></a>" +
+				"<a href=\"#\" data-theme=\"a\" class=\"botonVotar\"></a>" +
 			"</li>";
 
+    $('#espera').remove();
     $('#lista').append(textoAnadir);
+    $('#lista').listview('refresh');
+    arreglarEstiloLineas();
 
-    $('#lista').listview("refresh");
-    /*
-    <li id="idcancion" data-icon="star">
-    <a href="#" onclick="return false;" class="leftLink">
-    <span class="ui-link-inherit">
-    <h1>nombrecancion</h1><p>artistacancion</p><p>albumcancion</p>
-    </span>
-    </a>
-    <a href="#" data-theme="a"></a>
-    </li> */
 };
 
+function arreglarEstiloLineas(){
+    //Codigo para quitar el link izquierdo de los split button de las listview
+    $('.leftLink').parent().parent().parent().removeClass('ui-btn');
+    $('.leftLink').contents().unwrap();
+}
 
 //Funcion para cambiar el icono a una cancion votada. Recibe el id de la cancion y la transforma al selector jquery.
 function cambiarIconoVotada(id) {
